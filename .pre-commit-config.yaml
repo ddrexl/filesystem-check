@@ -1,0 +1,19 @@
+repos:
+-   repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v2.1.0
+    hooks:
+    -   id: check-added-large-files
+    -   id: check-docstring-first
+    -   id: check-json
+    -   id: check-yaml
+    -   id: debug-statements
+    -   id: double-quote-string-fixer
+    -   id: end-of-file-fixer
+    -   id: fix-encoding-pragma
+        args: [--remove]
+    -   id: name-tests-test
+    -   id: trailing-whitespace
+-   repo: https://github.com/pre-commit/mirrors-autopep8
+    rev: v1.4.3
+    hooks:
+    -   id: autopep8
