@@ -14,7 +14,7 @@ class AasChecks(object):
         for path in self.paths:
             for check in self.checks:
                 match = check(self, path)
-                if (match):
+                if match:
                     break
             else:
                 self.set_error(path, 'path not allowed')
@@ -25,14 +25,12 @@ class AasChecks(object):
     def set_error(self, path, message):
         self.errors[path] = message
 
-    # def get_all_errors(self):
-    #     def errors_for_path(path):
-    #         return '\n'.join(['    ' + e for e in self.errors[path]])
-    #     errors = ''
-    #     for path in self.errors:
-    #         errors += path + '\n' + errors_for_path(path)
-
-    #     return errors
+    def get_errors(self):
+        errors = ((path, self.get_error(path)) for path in self.paths)
+        formatting = '\n    Error: '
+        error_lines = (path + formatting + error for path,
+                       error in errors if error)
+        return '\n'.join(error_lines)
 
     def check_lifecycle(self, path):
         lifecycle = re.compile(r'^/lifecycle(/.+)*$')

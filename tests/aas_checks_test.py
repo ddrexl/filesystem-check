@@ -34,6 +34,7 @@ class TestAasChecks(unittest.TestCase):
                 '/communication/SomeType',
                 '/communication/someType',
                 '/communication/some_Type',
+                '/communication/BUILD',     # this is ugly
             ])
 
     def test_path_not_allowed(self):
@@ -65,3 +66,21 @@ class TestAasChecks(unittest.TestCase):
             error = aas_checks.get_error(path)
             self.assertEqual(message, error,
                              '{path} should {what}'.format(path=path, what='give error: ' + message if message else 'be valid'))
+
+    def test_get_errors(self):
+        aas_checks = AasChecks([
+            '/foo',
+            '/communication',
+            '/communication/some_type',
+            '/communication/some_type/some_type_codec.h',
+            '/communication/SomeType',
+            '/communication/SomeType/Codec.cpp',
+        ])
+        aas_checks.run()
+
+        self.assertEqual("""/foo
+    Error: path not allowed
+/communication/SomeType
+    Error: directory name must be snake_case
+/communication/SomeType/Codec.cpp
+    Error: source files must be either <type>_codec.(h|cpp) or <type>_conversion.(h|cpp)""", aas_checks.get_errors())
